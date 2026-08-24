@@ -480,7 +480,7 @@ def test_update_policy_rules(client, admin_token):
             "rules": [
                 {
                     "name": "Original Rule",
-                    "description": "Original",
+                    "description": "Original rule description",
                     "condition": {"field": "x", "operator": "==", "value": 1},
                     "action": "block",
                 }

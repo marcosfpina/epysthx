@@ -337,26 +337,26 @@ resource-limit gpu_count cpu_count memory_gb:
 test:
     #!/usr/bin/env bash
     echo -e "{{BLUE}}🧪 Running unit tests...{{NC}}"
-    uv run python -m pytest tests/ -v -m "not integration and not benchmark" --tb=short
+    poetry run python -m pytest tests/ -v -m "not integration and not benchmark" --tb=short
 
 # Run all tests including integration
 test-all:
     #!/usr/bin/env bash
     echo -e "{{BLUE}}🧪 Running all tests...{{NC}}"
-    uv run python -m pytest tests/ -v --tb=short
+    poetry run python -m pytest tests/ -v --tb=short
 
 # Run tests with coverage
 test-coverage:
     #!/usr/bin/env bash
     echo -e "{{BLUE}}📊 Running tests with coverage...{{NC}}"
-    uv run python -m pytest tests/ --cov=. --cov-report=html --cov-report=term
+    poetry run python -m pytest tests/ --cov=. --cov-report=html --cov-report=term
     echo -e "{{CYAN}}Coverage report: htmlcov/index.html{{NC}}"
 
 # Run specific test file
 test-file file:
     #!/usr/bin/env bash
     echo -e "{{BLUE}}🧪 Running {{file}}...{{NC}}"
-    uv run python -m pytest tests/{{file}} -v
+    poetry run python -m pytest tests/{{file}} -v
 
 # Format code with black and ruff
 fmt:

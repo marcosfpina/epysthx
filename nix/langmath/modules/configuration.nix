@@ -23,7 +23,7 @@ in
 
     llamaCppBaseUrl = mkOption {
       type = types.str;
-      default = "http://localhost:8081/v1";
+      default = "http://localhost:8080/v1";
       description = "OpenAI-compatible llama.cpp endpoint for LangMath local inference.";
     };
 

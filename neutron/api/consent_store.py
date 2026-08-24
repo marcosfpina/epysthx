@@ -97,8 +97,8 @@ class ConsentCreateRequest(BaseModel):
 
     customer_id: str = Field(..., min_length=3, max_length=128)
     regulation: str = Field(default="LGPD", description="LGPD, GDPR, etc.")
-    purposes: list[ConsentPurpose] = Field(..., min_items=1, description="Processing purposes")
-    data_types: list[DataType] = Field(..., min_items=1, description="Data types covered")
+    purposes: list[ConsentPurpose] = Field(..., min_length=1, description="Processing purposes")
+    data_types: list[DataType] = Field(..., min_length=1, description="Data types covered")
     expires_in_days: int | None = Field(
         None, ge=1, le=3650, description="Expiry in days (max 10 years)"
     )

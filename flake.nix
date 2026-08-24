@@ -35,6 +35,11 @@
             };
           };
 
+          # Padrão do ecossistema (cerebro/spooknix/neoland): Poetry é dono
+          # do .venv; o Nix fornece python + deps de sistema. poetry2nix foi
+          # abandonado — congelado em abr/2025, incompatível com nixpkgs
+          # atual (tags de wheel riscv64 no pep599 vendorado).
+
           # Pre-commit configuration
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
@@ -42,7 +47,6 @@
               nixpkgs-fmt.enable = true;
               black.enable = true;
               ruff.enable = true;
-              # mypy.enable = true; # Opcional, dependendo da velocidade
             };
           };
 
@@ -121,23 +125,14 @@
 
           # Development shells
           devShells = {
-            # Default shell - Poetry + todas ferramentas
+            # Shell padrão — Python via poetry2nix (reproduzível a partir do poetry.lock)
             default = pkgs.mkShell {
-              name = "neutron-ml-pipeline-dev";
+              name = "neotron";
 
               buildInputs = with pkgs; [
-                # Python environment via uv
-                uv
+                # Python + Poetry (dono do .venv, ver comentário acima)
                 python313
-                python313Packages.pytest
-                python313Packages.pytest-asyncio
-                python313Packages.numpy
-                python313Packages.mypy
-                python313Packages.click
-                python313Packages.web3
-                python313Packages.eth-account
-                python313Packages.temporalio
-                python313Packages.sqlalchemy
+                poetry
                 # System dependencies
                 postgresql_15
                 docker
@@ -159,17 +154,16 @@
                 pkg-config
 
                 # Blockchain development (Foundry)
-                foundry # forge, cast, anvil, chisel
+                foundry
 
                 # Decentralized storage
-                kubo # IPFS daemon and CLI (ipfs)
+                kubo
 
                 # Monitoring tools
                 htop
                 nvtopPackages.full
 
-
-                # CUDA (fornecido pelo Nix - versão específica)
+                # CUDA
                 cudaPackages.cudatoolkit
                 cudaPackages.cudnn
 
@@ -181,14 +175,21 @@
                 curl
                 wget
                 git
+                dotenv-cli
               ];
 
               shellHook = ''
                 ${pre-commit-check.shellHook}
                 echo "════════════════════════════════════════════════════════════"
-                echo "  🚀 Neutron ML Pipeline Dev Environment (uv)"
+                echo "  neotron dev (poetry @ .venv)"
                 echo "════════════════════════════════════════════════════════════"
                 echo ""
+
+                # Bootstrap do .venv na primeira entrada (padrão spooknix)
+                if [ ! -d ".venv" ] || ! .venv/bin/python -c "import fastapi" 2>/dev/null; then
+                  echo "📦 Instalando dependências com Poetry..."
+                  poetry install --with dev --no-interaction
+                fi
 
                 # CUDA paths
                 export CUDA_PATH="${pkgs.cudaPackages.cudatoolkit}"
@@ -201,46 +202,33 @@
                 export RAY_ADDRESS="auto"
                 export ML_GPU_COST_PER_HOUR="0.90"
 
-                # SOPS secrets — expostos via /run/secrets para neutron.core.sops
+                # SOPS secrets
                 export SOPS_SECRETS_DIR="/run/secrets/nexus"
 
-                # uv configuration
-                export UV_PYTHON=${pkgs.python313}/bin/python
-                export UV_VENV_PATH=".venv"
-
-                echo "📦 Python Environment:"
-                echo "  Python: $(python --version)"
-                echo "  uv: $(uv --version)"
-                echo "  CUDA: ${pkgs.cudaPackages.cudatoolkit.version}"
+                echo "Python: $(python --version 2>&1)"
+                echo "poetry: $(poetry --version 2>&1)"
+                echo "CUDA:   ${pkgs.cudaPackages.cudatoolkit.version}"
                 echo ""
-                echo "⛓️  Blockchain Development:"
-                echo "  Foundry: $(forge --version | head -n1)"
-                echo "  IPFS: $(ipfs --version)"
-                echo "  Commands: forge, cast, anvil, chisel, ipfs"
+                echo "Commands:"
+                echo "  just --list            # all tasks"
+                echo "  poetry run pytest      # run tests"
+                echo "  poetry add <pkg>       # add dependency (updates poetry.lock)"
+                echo "  forge test             # smart contract tests"
                 echo ""
-                echo "📦 Available commands:"
-                echo "  just --list         # List all tasks"
-                echo "  uv sync             # Install dependencies"
-                echo "  uv run <cmd>        # Run command in venv"
-                echo "  forge test          # Run smart contract tests"
-                echo ""
-                echo "🌐 Services (after 'just infra-up'):"
+                echo "Services (after 'just infra-up'):"
                 echo "  Temporal UI: http://localhost:8088"
                 echo "  API Server:  http://localhost:8000"
-                echo "  API Docs:    http://localhost:8000/docs"
-                echo ""
-                echo "✅ Environment ready!"
                 echo "════════════════════════════════════════════════════════════"
               '';
             };
 
-            # Production shell - sem dev tools
+            # Production shell — sem dev tools
             production = pkgs.mkShell {
-              name = "neutron-ml-pipeline-prod";
+              name = "neotron-prod";
 
               buildInputs = with pkgs; [
-                uv
                 python313
+                poetry
                 docker
                 docker-compose
                 costTrackerScript
@@ -250,28 +238,27 @@
               ];
 
               shellHook = ''
+                if [ ! -d ".venv" ] || ! .venv/bin/python -c "import fastapi" 2>/dev/null; then
+                  poetry install --only main --no-interaction
+                fi
                 export CUDA_PATH="${pkgs.cudaPackages.cudatoolkit}"
                 export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.cudaPackages.cudatoolkit}/lib:${pkgs.cudaPackages.cudnn}/lib:''${LD_LIBRARY_PATH:-}"
                 export MLFLOW_TRACKING_URI="http://localhost:5000"
                 export TEMPORAL_ADDRESS="localhost:7233"
-                echo "🚀 Neutron Production Environment Loaded"
+                echo "neotron Production Environment"
               '';
             };
           };
 
           # Packages exportáveis
           packages = {
-            # Worker como script executável
             worker = pkgs.writeShellScriptBin "neutron-worker" ''
               #!/usr/bin/env bash
               cd ${./.}
               python -m neutron.orchestration.worker "$@"
             '';
 
-            # Cost tracker
             cost-tracker = costTrackerScript;
-
-            # Resource limiter
             resource-limiter = resourceLimiterScript;
           };
 
@@ -283,12 +270,11 @@
             };
           };
 
-          # Formatter para nix code
           formatter = pkgs.nixpkgs-fmt;
         }
       )
     // {
-      # NixOS module para deployment (mantido do original)
+      # NixOS module para deployment
       nixosModules.default =
         { config
         , lib
@@ -382,7 +368,6 @@
             };
 
             config = mkIf cfg.enable {
-              # Create user and group
               users.users.${cfg.user} = {
                 isSystemUser = true;
                 group = cfg.group;
@@ -392,7 +377,6 @@
 
               users.groups.${cfg.group} = { };
 
-              # PostgreSQL setup
               services.postgresql = mkIf cfg.postgresql.enable {
                 enable = true;
                 ensureDatabases = [
@@ -411,7 +395,6 @@
                 ];
               };
 
-              # MLflow service
               systemd.services.mlflow = mkIf cfg.mlflow.enable {
                 description = "MLflow Tracking Server";
                 wantedBy = [ "multi-user.target" ];
@@ -430,8 +413,6 @@
                   '';
                   Restart = "always";
                   RestartSec = "10s";
-
-                  # Security hardening
                   PrivateTmp = true;
                   ProtectSystem = "strict";
                   ProtectHome = true;
@@ -439,7 +420,6 @@
                 };
               };
 
-              # Temporal worker service (multi-instance capable)
               systemd.services."neutron-worker@" = mkIf cfg.worker.enable {
                 description = "Neutron ML Pipeline Temporal Worker %i";
                 wantedBy = [ "multi-user.target" ];
@@ -453,12 +433,8 @@
                   ExecStart = "${self.packages.${pkgs.system}.worker}/bin/neutron-worker";
                   Restart = "always";
                   RestartSec = "10s";
-
-                  # Resource limits
                   MemoryMax = "16G";
                   CPUQuota = "400%";
-
-                  # Environment
                   Environment = [
                     "TEMPORAL_ADDRESS=localhost:${toString cfg.temporal.port}"
                     "MLFLOW_TRACKING_URI=http://localhost:${toString cfg.mlflow.port}"
@@ -467,14 +443,12 @@
                 };
               };
 
-              # Enable worker instances
               systemd.targets.neutron-workers = mkIf cfg.worker.enable {
                 description = "Neutron ML Pipeline Worker Pool";
                 wantedBy = [ "multi-user.target" ];
                 wants = map (i: "neutron-worker@${toString i}.service") (range 1 cfg.worker.instances);
               };
 
-              # Cost tracking timer (daily report)
               systemd.timers.neutron-cost-report = mkIf cfg.costTracking.enable {
                 description = "Daily Neutron ML Pipeline Cost Report";
                 wantedBy = [ "timers.target" ];
@@ -493,12 +467,11 @@
                 };
               };
 
-              # Firewall rules
               networking.firewall.allowedTCPPorts = mkIf cfg.enable [
                 cfg.temporal.port
                 cfg.mlflow.port
-                8088 # Temporal UI
-                8265 # Ray dashboard
+                8088
+                8265
               ];
             };
           };

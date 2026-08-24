@@ -8,7 +8,6 @@ on:
 
 env:
   NIX_CONFIG: "experimental-features = nix-command flakes"
-  UV_SYSTEM_PYTHON: 1
 
 jobs:
   # ------------------------------------------------------------------
@@ -56,13 +55,10 @@ jobs:
       - name: "Magic Nix Cache"
         uses: DeterminateSystems/magic-nix-cache-action@v2
 
-      - name: "Install uv"
-        uses: astral-sh/setup-uv@v1
-
       - name: "Hydrate Dev Environment"
         run: |
           nix develop --command echo "Nix shell hydrated"
-          nix develop --command uv sync --frozen
+          nix develop --command poetry install
 
       - name: "Static Analysis (Lint & Typecheck)"
         # Continue on error for lint to allow manual review, but fail if critical
@@ -93,12 +89,9 @@ jobs:
       - name: "Install Nix"
         uses: cachix/install-nix-action@v25
 
-      - name: "Install uv"
-        uses: astral-sh/setup-uv@v1
-
       - name: "Run Integration Suite"
         run: |
-          nix develop --command uv sync --frozen
+          nix develop --command poetry install
           nix develop --command just test-all
         env:
           TEMPORAL_ADDRESS: localhost:7233

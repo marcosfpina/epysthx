@@ -51,12 +51,8 @@ def operator_user(auth_store):
 
 
 @pytest.fixture
-def operator_token(client):
+def operator_token(client, operator_user):
     """Get operator access token."""
-    # Create operator user first
-    store = get_auth_store()
-    store.create_user("operator_test", "operator_pass", Role.OPERATOR)
-
     response = client.post(
         "/v1/auth/login",
         json={"username": "operator_test", "password": "operator_pass"},
