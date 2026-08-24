@@ -215,7 +215,8 @@ make run                                              # Start SIEM
 
 ## 📈 Roadmap (Cross-Repo)
 
-See `ROADMAP.md` for the full 5-phase plan. This document is the **architecture reference** that the roadmap executes against.
+See [`../ROADMAP.md`](../ROADMAP.md) for the canonical workspace plan. This document is the
+**architecture reference** that the roadmap executes against.
 
 ---
 

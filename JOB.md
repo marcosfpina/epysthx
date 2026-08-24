@@ -7,7 +7,7 @@ These documents are not static documentation. They are operational memory.
 Recommended files:
 
 ```text
-ROADMAP.md
+../ROADMAP.md
 ARCHITECTURE.md
 .agent/PROJECT_REFERENCE.md
 .agent/BACKLOG.md
@@ -16,7 +16,7 @@ ARCHITECTURE.md
 Their purpose:
 
 ```text
-ROADMAP.md
+../ROADMAP.md
   Tracks direction, milestones, priorities, phases, and next work.
 
 ARCHITECTURE.md
@@ -83,8 +83,8 @@ ARCHITECTURE.md
 .agent/BACKLOG.md
 ```
 
-If `ROADMAP.md` already exists, update it.
-If it does not exist, create a first version based on the current project state.
+Use the canonical workspace roadmap at `../ROADMAP.md`.
+Do not create a Neotron-local roadmap.
 
 ### New Repository
 
@@ -106,7 +106,7 @@ Recommended initial files:
 
 ```text
 README.md
-ROADMAP.md
+../ROADMAP.md
 ARCHITECTURE.md
 .agent/PROJECT_REFERENCE.md
 .agent/BACKLOG.md
@@ -173,9 +173,9 @@ The current stage of the project.
 
 ---
 
-## ROADMAP.md Maintenance
+## Canonical Roadmap Maintenance
 
-Before each task, the agent should inspect `ROADMAP.md` when present.
+Before each task, the agent should inspect `../ROADMAP.md`.
 
 The roadmap should be used as a guide for:
 
@@ -186,12 +186,12 @@ The roadmap should be used as a guide for:
 * Open architectural questions.
 * Milestones already completed.
 
-After completing a task, the agent should update `ROADMAP.md` when the task changes project direction, completes a milestone, creates a new next step, or invalidates an old plan.
+After completing a task, the agent should update `../ROADMAP.md` when the task changes project direction, completes a milestone, creates a new next step, or invalidates an old plan.
 
 The roadmap should not become a dumping ground.
 
 Use `.agent/BACKLOG.md` for discovered issues.
-Use `ROADMAP.md` for direction and sequencing.
+Use `../ROADMAP.md` for direction and sequencing.
 
 Recommended structure:
 
@@ -218,7 +218,7 @@ Recommended structure:
 Backlog and roadmap have different responsibilities:
 
 ```text
-ROADMAP.md
+../ROADMAP.md
   Where the project is going.
 
 .agent/BACKLOG.md
@@ -389,7 +389,7 @@ When updating inputs, explain why the lockfile changed.
 Before starting each non-trivial task:
 
 ```text
-1. Inspect ROADMAP.md if present.
+1. Inspect ../ROADMAP.md.
 2. Inspect ARCHITECTURE.md if present.
 3. Inspect .agent/PROJECT_REFERENCE.md if present.
 4. Inspect .agent/BACKLOG.md if relevant.
@@ -400,7 +400,7 @@ Before starting each non-trivial task:
 After completing each task:
 
 ```text
-1. Update ROADMAP.md if direction, phase, milestone, or next steps changed.
+1. Update ../ROADMAP.md if direction, phase, milestone, or next steps changed.
 2. Update ARCHITECTURE.md if system structure changed.
 3. Update .agent/PROJECT_REFERENCE.md if durable workflow knowledge was discovered.
 4. Update .agent/BACKLOG.md if issues were discovered outside scope.
@@ -423,7 +423,7 @@ Final handoff should include:
 
 ### Living Documents Updated
 
-- `ROADMAP.md`: updated / unchanged
+- `../ROADMAP.md`: updated / unchanged
 - `ARCHITECTURE.md`: updated / unchanged
 - `.agent/PROJECT_REFERENCE.md`: updated / unchanged
 - `.agent/BACKLOG.md`: updated / unchanged

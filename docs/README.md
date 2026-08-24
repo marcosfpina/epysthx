@@ -3,7 +3,7 @@
 ## 📚 Core Documents
 
 ### Strategic Planning
-- **[ROADMAP.md](../ROADMAP.md)** - 16-week implementation plan.
+- **[ROADMAP.md](../../ROADMAP.md)** - Canonical workspace roadmap.
 - **[NEXUS.md](../NEXUS.md)** - Vision and architecture.
 - **[PROJECT_STATUS.md](../PROJECT_STATUS.md)** - Current status.
 - **[CHANGELOG.md](../CHANGELOG.md)** - Version history.
@@ -23,7 +23,7 @@
 3.  Check **[SENTINEL_DESIGN.md](SENTINEL_DESIGN.md)**.
 
 #### For Product/Business
-1.  Read **[ROADMAP.md](../ROADMAP.md)**.
+1.  Read **[ROADMAP.md](../../ROADMAP.md)**.
 2.  Review **[NEXUS.md](../NEXUS.md)**.
 
 ---

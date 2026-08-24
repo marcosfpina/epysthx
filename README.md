@@ -447,7 +447,7 @@ result = await nexus_swarm.execute_with_memory(
 | [**BASTION Overview**](docs/reports/BASTION_OVERVIEW.md) | **Kernel-level enforcement (World's First)** 🚀 |
 | [Phase 2 Report](docs/reports/PHASE2_COMPLETE.md)        | Multi-agent orchestration                       |
 | [Phase 3 Report](docs/reports/PHASE3_COMPLETE.md)        | Explainability & EU AI Act                      |
-| [Roadmap](ROADMAP.md)                                    | Project roadmap and milestones                  |
+| [Roadmap](../ROADMAP.md)                                 | Canonical workspace roadmap                     |
 | [Quick Start](CI_CD_README.md)                           | Quick start guide for CI/CD                     |
 
 ---
@@ -520,21 +520,8 @@ Result: Compliance violations **mathematically impossible** at every layer
 
 ## Roadmap
 
-- **Phase 1**: SENTINEL (Compliance Guardrails) ✅
-- **Phase 1.5**: BASTION (Kernel-Level Enforcement) ✅ 🚀 **World's First**
-- **Phase 2**: CORTEX + SYNAPSE + GDPR ✅
-- **Phase 3**: ORACLE + EU AI Act ✅
-- **Phase 5**: BASTION-SC (Blockchain Foundation) ✅ 🚀 **World's First DeFi Compliance**
-  - Week 17: Smart contract compliance framework
-  - Week 18: IPFS + Arweave audit logging
-  - Week 19: DeFi lending protocol with 4-layer compliance
-- **Phase 6**: DeFi Compliance Expansion (Weeks 20-23)
-  - Week 20: Sepolia testnet deployment
-  - Week 21: Frontend + Web3 integration
-  - Week 22: Advanced DeFi features
-  - Week 23: Production deployment
-
-See [ROADMAP.md](ROADMAP.md) for detailed timeline.
+Milestones, priorities, release gates, and ecosystem dependencies are maintained only in the
+[canonical workspace roadmap](../ROADMAP.md).
 
 ---
 

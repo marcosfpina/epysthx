@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Documento histórico preservado. A única fonte canônica é [ROADMAP.md](../../ROADMAP.md).
+
 # NEXUS ROADMAP
 **Neutron Extended Universal System**
 **Source of Truth for Project Success & Deliverables**

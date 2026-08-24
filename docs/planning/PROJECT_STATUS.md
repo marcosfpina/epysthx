@@ -46,7 +46,7 @@ tests/             # Pytest test suite
 ## 🎯 Current Status: Ready for Phase 1
 
 ### Strategic Documents Created
-1. **ROADMAP.md** - Complete 16-week implementation plan
+1. **[ROADMAP.md](../../../ROADMAP.md)** - Canonical workspace roadmap
 2. **PHASE1_QUICKSTART.md** - Detailed Week 1-4 implementation guide
 3. **NEXUS.md** - Vision and architecture (existing)
 
@@ -156,7 +156,7 @@ mkdir -p neutron/compliance/auditors tests/compliance/auditors
 
 ## 📚 Key Documents
 
-- **ROADMAP.md** - Strategic plan (source of truth)
+- **[ROADMAP.md](../../../ROADMAP.md)** - Canonical strategic plan and source of truth
 - **PHASE1_QUICKSTART.md** - Detailed Week 1-4 guide
 - **NEXUS.md** - Vision & architecture
 - **README.md** - Getting started guide

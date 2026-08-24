@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Documento histórico preservado. A única fonte canônica é [ROADMAP.md](../ROADMAP.md).
+
 # NEXUS Platform — Roadmap Consolidado
 
 > **Last updated**: 2026-05-21  
