@@ -115,6 +115,10 @@ contract SupplyChainGuardian is ComplianceGuardrail {
         buildAttestation = new BuildAttestation();
         licenseRegistry = new LicenseRegistry(address(this));
         auditLogger = new AuditLogger();
+
+        // BuildAttestation records the guardian as the on-chain build service.
+        // The external submitter remains available in PackageAttestation.attestedBy.
+        buildAttestation.registerBuilder("SupplyChainGuardian", "");
     }
 
     // ── Full Package Attestation ───────────────────────────────────────────
@@ -189,6 +193,7 @@ contract SupplyChainGuardian is ComplianceGuardrail {
             flakeInputHash,
             buildIpfsCid
         );
+        buildAttestation.verifyBuild(buildId);
 
         // 3. License Minting (NFT)
         uint256 licenseTokenId = licenseRegistry.mintLicense(
